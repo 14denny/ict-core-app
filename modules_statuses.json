@@ -1,0 +1,8 @@
+{
+    "Auth": true,
+    "Beranda": true,
+    "Users": true,
+    "Manajemen": false,
+    "Logbook": false,
+    "Bernda": false
+}
