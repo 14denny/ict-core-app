@@ -1,6 +1,6 @@
 ## Tentang Repo
 
-Ini adalah core app untuk memudahkan pengembangan aplikasi di USK. Repo ini dibangun menggunakan Framework Laravel 9. Versi PHP yang dibutuhkan adalah PHP v8. Repo ini memiliki fitur:
+Ini adalah core app untuk memudahkan pengembangan aplikasi di USK. Repo ini dibangun menggunakan Framework Laravel 10. Versi PHP yang dibutuhkan adalah PHP v8. Repo ini memiliki fitur:
 
 - Manajemen User (Manual user, User Pegawai, User Mhs)
 
