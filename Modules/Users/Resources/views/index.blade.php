@@ -4,8 +4,20 @@
     User
 @endsection
 
-@section('subtitle')
-    Daftar User
+
+
+@section('breadcrumbs')
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-gray-600 fw-bold lh-1">User</li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item">
+        <i class="ki-outline ki-right fs-7 text-gray-700 mx-n1"></i>
+    </li>
+    <!--end::Item-->
+    <!--begin::Item-->
+    <li class="breadcrumb-item text-gray-500">Daftar User</li>
+    <!--end::Item-->
 @endsection
 
 @section('body')

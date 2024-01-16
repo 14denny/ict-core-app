@@ -1,4 +1,4 @@
-const tableUser = KTDataTable;
+const tableUser = new KTDataTable();
 KTUtil.onDOMContentLoaded((function () {
     tableUser.init('#table-user', "Daftar User", {
         info: true,

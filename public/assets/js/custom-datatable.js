@@ -6,12 +6,12 @@ jQuery.fn.dataTable.Api.register('processing()', function (show) {
     });
 });
 
-var KTDataTable = function () {
+function KTDataTable() {
     // Shared variables
     var table;
     var datatable;
 
-    var initDataTable = function (options={}) {
+    var initDataTable = function (options = {}) {
         datatable = $(table).DataTable(options);
     }
 
@@ -67,8 +67,8 @@ var KTDataTable = function () {
 
     var delayTimer;
     var lastValueSearch = ""
-    var handleSearchDatatable = () => {
-        const filterSearch = document.querySelector('[data-table-filter="search"]');
+    var handleSearchDatatable = (searchElementSelector) => {
+        const filterSearch = document.querySelector(searchElementSelector);
         filterSearch.addEventListener('keyup', function (e) {
 
             //prevent useless key listened (alt, ctrl, shift, etc)
@@ -81,7 +81,7 @@ var KTDataTable = function () {
 
                 delayTimer = setTimeout(function () {
                     datatable.search(e.target.value).draw();
-                }, 1000);
+                }, 500);
             }
         });
     }
@@ -89,7 +89,7 @@ var KTDataTable = function () {
 
 
     return {
-        init: function (tableid, documentTitle, options) {
+        init: function (tableid, documentTitle, options, searchElementSelector = '[data-table-filter="search"]') {
             table = document.querySelector(tableid);
 
             if (!table) {
@@ -98,7 +98,7 @@ var KTDataTable = function () {
 
             initDataTable(options);
             exportButtons(documentTitle);
-            handleSearchDatatable();
+            handleSearchDatatable(searchElementSelector);
         },
         getNextNumber: function () {
             const lastRow = datatable.row(':last').data();
@@ -132,15 +132,15 @@ var KTDataTable = function () {
         reloadAjax: function () {
             datatable.ajax.reload(null, false)
         },
-        clear:function(){
+        clear: function () {
             datatable.clear().draw()
         },
-        showProcessing: function(){
+        showProcessing: function () {
             datatable.processing(true)
         },
-        hideProcessing: function(){
+        hideProcessing: function () {
             datatable.processing(false)
         }
     }
-}();
+}
 
