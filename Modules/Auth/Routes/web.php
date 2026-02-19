@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('/')->name('auth.')->group(function () {
     Route::get('/', 'AuthController@index')->name('form');
     Route::post('/', 'AuthController@doLogin')->name('login');
-    // Route::get('/tes', 'AuthController@tes');
-    Route::get('/cek', 'AuthController@cek');
     Route::get('/logout', 'AuthController@logout')->name('logout');
+    Route::get('/img-captcha', 'AuthController@generateImageCaptcha')->name('img-captcha');
 });

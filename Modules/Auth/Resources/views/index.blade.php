@@ -138,15 +138,26 @@ License: For each use you must have a valid license purchased only from above li
                                     class="form-control bg-transparent" />
                                 <!--end::Password-->
                             </div>
-                            <!--end::Input group=-->
-                            <!--begin::Wrapper-->
-                            <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
-                                <div></div>
-                                <!--begin::Link-->
-                                {{-- <a href="#" class="link-primary">Lupa password ?</a> --}}
-                                <!--end::Link-->
+                            <!--end::Input group=--><!--begin::Captcha=-->
+                            <div class="fv-row mb-3">
+                                <div class="d-flex flex-column">
+                                    <div>
+                                        <img id="img-captcha" src="{{ route('auth.img-captcha') . '?' . time() }}"
+                                            width="{{ config('captcha.width') }}"
+                                            height="{{ config('captcha.height') }}" alt="">
+                                        <button class="btn btn-icon btn-sm btn-secondary" onclick="reloadCaptcha()"
+                                            type="button">
+                                            <i class="ki-duotone ki-arrows-circle fs-3">
+                                                <span class="path1"></span>
+                                                <span class="path2"></span>
+                                            </i>
+                                        </button>
+                                    </div>
+                                    <input type="text" id="captcha-input" name="captcha_input"
+                                        class="form-control mt-2" placeholder="Masukkan text yang Anda lihat di atas">
+                                </div>
                             </div>
-                            <!--end::Wrapper-->
+                            <!--end::Captcha=-->
                             <!--begin::Submit button-->
                             <div class="d-grid mb-10">
                                 <button type="submit" id="btn-submit" class="btn btn-primary">
@@ -208,6 +219,7 @@ License: For each use you must have a valid license purchased only from above li
                     if(result.status){
                         location.reload()
                     }else{
+                        reloadCaptcha()
                         showSwal('error', result.msg)
                     }
                 }
@@ -215,6 +227,10 @@ License: For each use you must have a valid license purchased only from above li
                 swalFailed()
             })
         })
+
+        function reloadCaptcha() {
+            $("#img-captcha").attr('src', "{{ route('auth.img-captcha') }}?" + new Date().getTime());
+        }
     </script>
     <!--end::Javascript-->
 </body>

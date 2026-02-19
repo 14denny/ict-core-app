@@ -40,26 +40,21 @@ class AuthController extends Controller
         try {
             $username = $request->post('username');
             $password = $request->post('password');
+            $captchaInput = $request->post('captcha_input');
+            if ($captchaInput != session(config('captcha.session'))) {
+                echo json_encode(array(
+                    'status' => false,
+                    'msg' => "Captcha tidak sesuai",
+                    'csrf_token' => csrf_token()
+                ));
+                return;
+            }
 
             $userModel = new UserUsk();
             $user = $userModel->attempLogin($username, $password);
 
             if (!$user) {
-                switch(strlen($username)){
-                    case 13:
-                        //login mhs
-                        $user = $userModel->attempLoginMhs($username, $password);
-                        break;
-                    case 18:
-                        //login pegawai
-                        $user = $userModel->attempLoginPegawai($username, $password);
-                        break;
-                    default: 
-                        $user = null;
-                }
-                if (!$user) {
-                    throw new Exception("Username atau password salah");
-                }
+                $user = $userModel->attempLoginMhs($username, $password);
             }
 
             $request->session()->regenerate();
@@ -128,5 +123,60 @@ class AuthController extends Controller
     {
         $request->session()->flush();
         return redirect(route('auth.form'));
+    }
+    public function generateImageCaptcha()
+    {
+        header("Content-Type: image/png");
+
+        // Set image size
+        $width = config('captcha.width');
+        $height = config('captcha.height');
+
+        // Create image resource
+        $image = imagecreatetruecolor($width, $height);
+
+        // Set background color
+        $background_color = imagecolorallocate($image, 255, 255, 255);
+        imagefill($image, 0, 0, $background_color);
+
+        // Set text color
+        $text_color = imagecolorallocate($image, 0, 0, 0);
+
+        // Set text font
+        $font = public_path('assets/fonts/roboto.ttf');
+
+        // Set text
+        $captcha_text = AppHelper::generateRandomString('5');
+        $session_key = config('captcha.session');
+        session([
+            $session_key => $captcha_text
+        ]);
+        $text = $captcha_text;
+
+        // Get text size
+        $text_box = imagettfbbox(20, 0, $font, $text);
+        $text_width = $text_box[2] - $text_box[0];
+        $text_height = $text_box[3] - $text_box[1];
+
+        // Calculate text position
+        $x = ($width / 2) - ($text_width / 2);
+        $y = ($height / 2) - ($text_height / 2);
+
+        // Add text to image
+        imagettftext($image, 20, 0, $x, $y, $text_color, $font, $text);
+
+        // Set line color
+        $line_color = imagecolorallocate($image, 128, 128, 128);
+
+        // Draw random lines
+        for ($i = 0; $i < 30; $i++) {
+            imageline($image, rand(0, $width), rand(0, $height), rand(0, $width), rand(0, $height), $line_color);
+        }
+
+        // Output image
+        imagepng($image);
+
+        // Destroy image resource
+        imagedestroy($image);
     }
 }
