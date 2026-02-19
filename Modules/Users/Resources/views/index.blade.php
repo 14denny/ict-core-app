@@ -80,7 +80,7 @@
                 <div class="card-header border-0 py-5">
                     <div class="col-12">
                         <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bold fs-3 mb-1">Daftar User Aplikasi SIM Budidaya</span>
+                            <span class="card-label fw-bold fs-3 mb-1">Daftar User Aplikasi {{ config('app.name') }}</span>
                         </h3>
                     </div>
                     <div class="col-12">

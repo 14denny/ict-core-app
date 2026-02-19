@@ -15,14 +15,14 @@ License: For each use you must have a valid license purchased only from above li
 
 <head>
     <base href="" />
-    <title>ICT Core App - Sign In</title>
+    <title>{{ config('app.name') }} - Sign In</title>
     <meta charset="utf-8" />
-    <meta name="description" content="ICT Core App" />
+    <meta name="description" content="{{ config('app.name') }}" />
     <meta name="keywords" content="budidaya, bawang merah" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="SIM BUDIDAYA" />
+    <meta property="og:title" content="{{ config('app.name') }}" />
     {{-- <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Keenthemes | Metronic" />
     <link rel="canonical" href="https://preview.keenthemes.com/metronic8" /> --}}
@@ -91,7 +91,7 @@ License: For each use you must have a valid license purchased only from above li
                     <!--end::Image-->
                     <!--begin::Title-->
                     <h1 class="text-gray-800 fs-2qx fw-bold text-center mb-7">
-                        ICT Core App
+                        {{ config('app.name') }}
                     </h1>
                     <!--end::Title-->
                     <!--begin::Text-->
@@ -117,25 +117,8 @@ License: For each use you must have a valid license purchased only from above li
                                 <!--begin::Title-->
                                 <h1 class="text-dark fw-bolder mb-3">Sign In</h1>
                                 <!--end::Title-->
-                                <!--begin::Subtitle-->
-                                <div class="text-gray-500 fw-semibold fs-6">Single Sign On USK</div>
-                                <!--end::Subtitle=-->
                             </div>
                             <!--begin::Heading-->
-                            <!--begin::Login options-->
-                            <div class="row g-3 mb-9">
-                                <!--begin::Col-->
-                                <div class="col-md-12">
-                                    <!--begin::Google link=-->
-                                    <a href="#"
-                                        class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                                        <img alt="Logo" src="{{ url('assets/media/logos/logo-unsyiah-sm.png') }}"
-                                            class="h-15px me-3" />SSO USK</a>
-                                    <!--end::Google link=-->
-                                </div>
-                                <!--end::Col-->
-                            </div>
-                            <!--end::Login options-->
                             <!--begin::Separator-->
                             <div class="separator separator-content my-14">
                                 <span class="w-125px text-gray-500 fw-semibold fs-7">Login dengan username</span>

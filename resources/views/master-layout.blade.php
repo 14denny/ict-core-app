@@ -4,17 +4,17 @@
 
 <head>
     <base href="" />
-    <title>SIM BUDIDAYA - @yield('title')</title>
+    <title>{{ config('app.name') }} - @yield('title')</title>
     <meta charset="utf-8" />
     <meta name="description" content="Sistem Informasi Budidaya Bawang Merah" />
     <meta name="keywords" content="budidaya, bawang merah" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="SIM BUDIDAYA" />
+    <meta property="og:title" content="{{ config('app.name') }}" />
     <link rel="shortcut icon" href="{{ url('assets/media/logos/logo-unsyiah-sm.png') }}" />
     <!--begin::Fonts(mandatory for all pages)-->
-    <link rel="stylesheet" href="{{url('assets/fonts/inter.css')}}" type="text/css"/>
+    <link rel="stylesheet" href="{{ url('assets/fonts/inter.css') }}" type="text/css" />
     <!--end::Fonts-->
     <!--begin::Vendor Stylesheets(used for this page only)-->
     <link href="{{ url('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -133,8 +133,7 @@
                         <!--end::Logo-->
                         <!--begin::Info-->
                         <span class="d-flex flex-column align-items-start flex-grow-1">
-                            <span class="fs-5 fw-bold text-white text-uppercase" data-kt-element="title">ICT Core
-                                App</span>
+                            <span class="fs-5 fw-bold text-white text-uppercase" data-kt-element="title">{{ config('app.name') }}</span>
                         </span>
                         <!--end::Info-->
                     </a>
