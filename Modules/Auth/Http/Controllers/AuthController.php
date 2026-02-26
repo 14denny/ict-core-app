@@ -4,12 +4,13 @@ namespace Modules\Auth\Http\Controllers;
 
 use App\Helpers\AppHelper;
 use App\Helpers\MenuHelper;
+use App\Http\Controllers\Controller;
 use App\Models\UserUsk;
 use Exception;
 use Illuminate\Contracts\Session\Session;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -29,12 +30,7 @@ class AuthController extends Controller
     public function doLogin(Request $request)
     {
         if ($request->session()->has('username')) {
-            echo json_encode(array(
-                'status' => true,
-                'msg' => "Ok",
-                'csrf_token' => csrf_token()
-            ));
-            return;
+            return $this->resSuccess(null, "OK");
         }
 
         try {
@@ -42,12 +38,7 @@ class AuthController extends Controller
             $password = $request->post('password');
             $captchaInput = $request->post('captcha_input');
             if ($captchaInput != session(config('captcha.session'))) {
-                echo json_encode(array(
-                    'status' => false,
-                    'msg' => "Captcha tidak sesuai",
-                    'csrf_token' => csrf_token()
-                ));
-                return;
+                return $this->resError("Captcha tidak sesuai $captchaInput != " . session(config('captcha.session')));
             }
 
             $userModel = new UserUsk();
@@ -55,6 +46,9 @@ class AuthController extends Controller
 
             if (!$user) {
                 $user = $userModel->attempLoginMhs($username, $password);
+                if(!$user){
+                    return $this->resError("Username atau password salah");
+                }
             }
 
             $request->session()->regenerate();
@@ -63,7 +57,9 @@ class AuthController extends Controller
             $parent_menu = [];
             $submenu = [];
             $current_parent = "";
+            $allAkses = [];
             foreach ($listMenu as $menu) {
+                array_push($allAkses, $menu->url);
                 if (!$menu->parent) {
                     $current_parent = $menu->nama;
                     array_push($parent_menu, array(
@@ -99,23 +95,17 @@ class AuthController extends Controller
                 'username' => $user->username,
                 'name' => $user->name,
                 'email' => $user->email,
+                'all_akses' => $allAkses,
                 'menus' => array(
                     'parent' => $parent_menu,
                     'sub' => $submenu
                 )
             ]);
 
-            echo json_encode(array(
-                'status' => true,
-                'msg' => "Ok",
-                'csrf_token' => csrf_token()
-            ));
+            return $this->resSuccess(null, "OK");
         } catch (Exception $e) {
-            echo json_encode(array(
-                'status' => false,
-                'msg' => $e->getMessage(),
-                'csrf_token' => csrf_token()
-            ));
+            Log::error("Error saat login: " . $e->getMessage());
+            return $this->resError("Terjadi kesalahan saat login. Harap coba lagi");
         }
     }
 

@@ -3,11 +3,12 @@
 namespace Modules\Users\Http\Controllers;
 
 use App\Helpers\AppHelper;
+use App\Http\Controllers\Controller;
 use App\Models\UserUsk;
 use Exception;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 
 class UsersController extends Controller
 {
@@ -36,28 +37,28 @@ class UsersController extends Controller
             $passwordConf = $request->post('password_confirm');
 
             if (!$username || !$nama || !$email || !$role || !$password || !$passwordConf) {
-                throw new Exception("Harap isi semua data dengan benar");
+                return $this->resError("Harap isi semua data dengan benar");
             }
 
             if(preg_match('/[^a-zA-Z0-9_-]+/', $username)){
-                throw new Exception("Username hanya boleh mengandung karakter angka, huruf, strip (-) dan/atau underscore (_)");
+                return $this->resError("Username hanya boleh mengandung karakter angka, huruf, strip (-) dan/atau underscore (_)");
             }
 
             if (preg_match('/^[0-9]+$/', $username)) {
-                throw new Exception("Username tidak boleh terdiri hanya dari angka");
+                return $this->resError("Username tidak boleh terdiri hanya dari angka");
             }
 
             if (!preg_match('/[a-zA-Z]+/', $username)) {
-                throw new Exception("Username harus mengandung huruf");
+                return $this->resError("Username harus mengandung huruf");
             }
 
             if ($password != $passwordConf) {
-                throw new Exception("Password dan konfirmasi password tidak sama");
+                return $this->resError("Password dan konfirmasi password tidak sama");
             }
 
             //cek username valid
             if ($userModel->getUserByUsername($username)) {
-                throw new Exception("Username sudah digunakan dan tidak dapat digunakan untuk akun lain");
+                return $this->resError("Username sudah digunakan dan tidak dapat digunakan untuk akun lain");
             }
 
             $newUser = array(
@@ -70,23 +71,13 @@ class UsersController extends Controller
 
             if ($userModel->addUser($newUser)) {
                 $newUser = $userModel->getUserByUsername($username);
-                echo json_encode(array(
-                    'status' => true,
-                    'msg' => "Berhasil menambah user baru",
-                    'csrf_token' => csrf_token(),
-                    'newUser' => $newUser
-                ));
-                return;
+                return $this->resSuccess(['newUser' => $newUser], "Berhasil menambah user baru");
             } else {
-                throw new Exception("Gagal menambahkan user baru");
+                return $this->resError("Gagal menambahkan user baru");
             }
         } catch (Exception $e) {
-            echo json_encode(array(
-                'status' => false,
-                'msg' => $e->getMessage(),
-                'csrf_token' => csrf_token()
-            ));
-            return;
+            Log::error("Error saat menambahkan user baru: " . $e->getMessage());
+            return $this->resError("Terjadi kesalahan saat menambahkan user baru");
         }
     }
 
@@ -94,13 +85,13 @@ class UsersController extends Controller
         try {
             $username = $request->input('username');
             if(!$username){
-                throw new Exception("Username tidak dapat ditemukan");
+                return $this->resError("Username tidak dapat ditemukan");
             }
 
             $userModel = new UserUsk();
 
             if(!$userModel->getUserByUsername($username)){
-                throw new Exception("User tidak dapat ditemukan");
+                return $this->resError("User tidak dapat ditemukan");
             }
 
             if($userModel->deleteUser($username)){
@@ -111,7 +102,7 @@ class UsersController extends Controller
                 ));
                 return;
             } else {
-                throw new Exception("Gagal menghapus user");
+                return $this->resError("Gagal menghapus user");
             }
         } catch (Exception $e) {
             echo json_encode(array(
@@ -126,13 +117,13 @@ class UsersController extends Controller
         try {
             $username = $request->input('username');
             if(!$username){
-                throw new Exception("Username tidak dapat ditemukan");
+                return $this->resError("Username tidak dapat ditemukan");
             }
 
             $userModel = new UserUsk();
 
             if(!$userModel->getUserByUsername($username)){
-                throw new Exception("User tidak dapat ditemukan");
+                return $this->resError("User tidak dapat ditemukan");
             }
 
             $randomPassword = AppHelper::generateRandomString();
@@ -145,7 +136,7 @@ class UsersController extends Controller
                 ));
                 return;
             } else {
-                throw new Exception("Gagal mereset password user");
+                return $this->resError("Gagal mereset password user");
             }
         } catch (Exception $e) {
             echo json_encode(array(
