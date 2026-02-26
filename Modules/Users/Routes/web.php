@@ -13,7 +13,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('users')->middleware(['adminOnly'])->name('users.')->group(function() {
+Route::prefix('users')->middleware(['hakAkses'])->name('users.')->group(function() {
     Route::get('/', 'UsersController@index')->name('all');
     Route::post('/', 'UsersController@addUser')->name('add');
     Route::delete('/', 'UsersController@deleteUser')->name('delete');

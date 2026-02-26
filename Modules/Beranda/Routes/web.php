@@ -13,6 +13,6 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('beranda')->name('beranda.')->group(function() {
+Route::prefix('beranda')->middleware(['hakAkses'])->name('beranda.')->group(function() {
     Route::get('/', 'BerandaController@index')->name('index');
 });

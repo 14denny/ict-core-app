@@ -356,6 +356,7 @@
     <script src="{{ url('assets/plugins/custom/datatables/datatables.bundle.js') }}"></script>
     <script src="{{ url('assets/js/custom-datatable.js') }}"></script>
     <script src="{{ url('assets/js/swal.js') }}"></script>
+    <script src="{{ url('assets/js/utilities.js') }}"></script>
     <!--end::Global Javascript Bundle-->
     <!--end::Javascript-->
 
