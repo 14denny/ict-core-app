@@ -57,7 +57,7 @@ class UserUsk extends Model
     function attempLoginPegawai($nip, $password){
         try{
             $key_ws_pegawai = config('ws.ws-dosen');
-            $response = AppHelper::get_curl("http://ws.unsyiah.ac.id/webservice/dosen/cdosen/login/nip/$nip/key/$key_ws_pegawai", 'xml'); //eksekusi api login
+            $response = AppHelper::get_curl("http://ws.usk.ac.id/webservice/dosen/cdosen/login/nip/$nip/key/$key_ws_pegawai", 'xml'); //eksekusi api login
 
             if ($response && is_object($response)) {
                 if ($response->status != 1) {

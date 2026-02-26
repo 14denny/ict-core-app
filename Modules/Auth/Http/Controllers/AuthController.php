@@ -38,7 +38,7 @@ class AuthController extends Controller
             $password = $request->post('password');
             $captchaInput = $request->post('captcha_input');
             if ($captchaInput != session(config('captcha.session'))) {
-                return $this->resError("Captcha tidak sesuai $captchaInput != " . session(config('captcha.session')));
+                return $this->resError("Captcha tidak sesuai");
             }
 
             $userModel = new UserUsk();
@@ -46,8 +46,11 @@ class AuthController extends Controller
 
             if (!$user) {
                 $user = $userModel->attempLoginMhs($username, $password);
-                if(!$user){
-                    return $this->resError("Username atau password salah");
+                if (!$user) {
+                    $user = $userModel->attempLoginPegawai($username, $password);
+                    if (!$user) {
+                        return $this->resError("Username atau password salah");
+                    }
                 }
             }
 
