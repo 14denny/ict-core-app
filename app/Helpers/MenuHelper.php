@@ -19,10 +19,11 @@ class MenuHelper
         }
 
         return DB::table('menu')
-            ->select(['menu.nama', 'menu.url', 'parent_menu.nama as parent', 'parent_menu.path as parent_path', 'parent_menu.icon as icon_parent', 'menu.icon as menu_icon'])
+            ->select(['menu.nama', 'menu.url', 'parent_menu.nama as parent', 'parent_menu.path as parent_path', 'parent_menu.icon as icon_parent', 'menu.icon as menu_icon', DB::raw('IFNULL(parent_menu.order, menu.order) as menu_order')])
             ->join('role_menu', 'role_menu.id_menu', '=', 'menu.id')
             ->leftJoin('parent_menu', 'parent_menu.id', '=', 'menu.id_parent_menu')
             ->where('role_menu.id_role', '=', $roleid)
+            ->orderBy('menu_order')
             ->orderBy('parent_menu.order')
             ->orderBy('menu.order')
             ->get();
@@ -39,12 +40,6 @@ class MenuHelper
     }
 
     public static function getFirstMenuRole($roleid){
-        return DB::selectOne('SELECT m.url, m.order, 
-            (select pm.order from parent_menu pm where pm.id=m.id_parent_menu) as order_parent from 
-            (select * from role_menu where id_role=?) rm 
-            join (select * from menu where menu.id in (select id_menu from role_menu where id_role=?)) m on m.id=rm.id_menu
-            where id_role=?
-            order by m.order, order_parent
-            limit 1', [$roleid, $roleid, $roleid])->url;
+        return self::getListMenu($roleid)->first()->url;
     }
 }
